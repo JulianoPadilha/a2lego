@@ -12,7 +12,7 @@ var gulp = require('gulp'),
 	dirs = pkg['configs'].directories,
 
 	// General files
-	_files = ['*.php', '*.html', 'build/**/*'];
+	_files = ['*.php', '*.html', '*.pug', 'build/**/*'];
 
 	// COPY ===================================================
 
@@ -48,9 +48,15 @@ var gulp = require('gulp'),
 	// PUG ==================================================
 
 		gulp.task('pug', function(){
-			gulp.src('*.pug')
+			return gulp.src('*.pug')
 				.pipe(plugins.pug())
 				.pipe(gulp.dest(''));
+		});
+
+		gulp.task('pugcomponents', function(){
+			return gulp.src('components/**/*.pug')
+				.pipe(plugins.pug())
+				.pipe(gulp.dest('components/'));
 		});
 
 	// STYLES ==================================================
@@ -112,6 +118,10 @@ var gulp = require('gulp'),
 
 					gulp.watch(['*.pug'], ['pug']);
 
+				// Watch pug components
+
+					gulp.watch(['components/**/*.pug'], ['pugcomponents']);
+
 				// Watch CSS
 
 					gulp.watch([dirs._assets+'/scss/**/*.scss'], ['sass']);
@@ -128,7 +138,6 @@ var gulp = require('gulp'),
 			gulp.task('sync', ['watch', 'browser-sync']);
 			gulp.task('css', ['sass']);
 			gulp.task('js', ['lint', 'concat']);
-			gulp.task('folders', ['createfolders']);
 			gulp.task('copy', [
 				'copy:html5shiv',
 				'copy:normalize'
