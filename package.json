@@ -34,7 +34,8 @@
     "directories": {
       "_assets": "assets",
       "_build": "build",
-      "_components": "bower_components"
+      "_components": "bower_components",
+      "_legos": "components"
     }
   }
 }

@@ -50,13 +50,17 @@ var gulp = require('gulp'),
 		gulp.task('pug', function(){
 			return gulp.src('*.pug')
 				.pipe(plugins.pug())
-				.pipe(gulp.dest(''));
+				.pipe(gulp.dest(''))
+				.pipe(plugins.livereload())
+				.pipe(reload({stream: true}));
 		});
 
 		gulp.task('pugcomponents', function(){
 			return gulp.src('components/**/*.pug')
 				.pipe(plugins.pug())
-				.pipe(gulp.dest('components/'));
+				.pipe(gulp.dest('components/'))
+				.pipe(plugins.livereload())
+				.pipe(reload({stream: true}));
 		});
 
 	// STYLES ==================================================
@@ -73,6 +77,22 @@ var gulp = require('gulp'),
 							.on(plugins.sass(), plugins.sass.logError)
 							.pipe(plugins.sourcemaps.write('.'))
 							.pipe(gulp.dest(dirs._build+'/css'))
+							.pipe(plugins.livereload())
+							.pipe(reload({stream: true}));
+			});
+
+		// components style
+
+			gulp.task('sasscomponents', function() {
+				return gulp.src(dirs._legos+'/**/*.scss')
+							.pipe(plugins.rename({suffix: '.min'}))
+							.pipe(plugins.sourcemaps.init())
+							.pipe(plugins.sass({
+								outputStyle: 'compressed'
+							}))
+							.on(plugins.sass(), plugins.sass.logError)
+							.pipe(plugins.sourcemaps.write('.'))
+							.pipe(gulp.dest(dirs._legos+'/'))
 							.pipe(plugins.livereload())
 							.pipe(reload({stream: true}));
 			});
@@ -126,6 +146,10 @@ var gulp = require('gulp'),
 
 					gulp.watch([dirs._assets+'/scss/**/*.scss'], ['sass']);
 
+				// Watch CSS components
+
+					gulp.watch([dirs._legos+'/**/*.scss'], ['sasscomponents']);
+
 				// Watch images
 
 					gulp.watch([dirs._assets+'/img/*'], ['imagemin']);
@@ -136,7 +160,7 @@ var gulp = require('gulp'),
 			gulp.task('default', ['watch', 'copy']);
 			gulp.task('images', ['imagemin']);
 			gulp.task('sync', ['watch', 'browser-sync']);
-			gulp.task('css', ['sass']);
+			gulp.task('css', ['sass', 'sasscomponents']);
 			gulp.task('js', ['lint', 'concat']);
 			gulp.task('copy', [
 				'copy:html5shiv',

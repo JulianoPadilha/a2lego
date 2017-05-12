@@ -1,4 +1,14 @@
-section.hero-section
-	div.hero-section-text
-		h1.title
-		p.subtitle
+- var title = "Responsive Hero Section"
+html
+	head
+		title= title
+		include ../../partials/style.pug
+		link(rel="stylesheet" href="style.min.css")
+		meta(charset="utf-8")
+		meta(name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no")
+	body
+		include ../../partials/header.pug
+		section.hero-section
+			div.hero-section-text
+				h1.title Main Title
+				p.subtitle responsive hero section subtitle
